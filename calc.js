@@ -1,30 +1,47 @@
+// Get the input field (display box)
 let input = document.getElementById('inputBox');
+
+// Select all calculator buttons
 let buttons = document.querySelectorAll('button');
 
+// Initialize expression string
 let string = "";
+
+// Convert NodeList to Array
 let arr = Array.from(buttons);
 
-arr.forEach(button =>{
-    button.addEventListener('click', (e) =>{
-        if(e.target.innerHTML == '='){
-            string = eval(string);
-            input.value =string;
+// Add click listener to each button
+arr.forEach(button => {
+    button.addEventListener('click', (e) => {
+        let value = e.target.innerHTML;
+
+        // Handle Equal '='
+        if (value === '=') {
+            try {
+                string = eval(string); // Evaluate the expression
+                input.value = string;
+            } catch (err) {
+                input.value = "Error";
+                string = "";
+            }
         }
 
-        else if(e.target.innerHTML == 'AC'){
-            string ="";
-            input.value =string;
-        }
-
-        else if(e.target.innerHTML == 'DEL'){
-            string = string.substring(0, string.length-1);
+        // Handle All Clear 'AC'
+        else if (value === 'AC') {
+            string = "";
             input.value = string;
         }
 
-        else{
-            string += e.target.innerHTML;
-            input.value =string;
+        // Handle Delete 'DEL'
+        else if (value === 'DEL') {
+            string = string.substring(0, string.length - 1);
+            input.value = string;
         }
 
-    })
-})
+        // Handle normal number/operator input
+        else {
+            string += value;
+            input.value = string;
+        }
+    });
+});
